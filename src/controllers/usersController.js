@@ -1,27 +1,67 @@
+import { userService } from '../services';
 
-const list = (req, res) => {
-    res.send({ message: 'Soy el controlador del usuario' });
-}
-const find = (req, res) => {
-    res.send({ message: 'Soy el controlador del usuario' });
-}
+const list = async (req, res) => {
+  const users = await userService.list();
+  return res.json(users);
+};
+
+const find = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userService.find(id);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.status(500).send({ message: 'Error al encontrar el usuario' });
+  }
+};
 
 const create = (req, res) => {
-    res.send({ message: 'Soy el controlador del usuario' });
-}
+  const { name } = req.body;
+
+  return userService.create(name)
+    .then((result) => {
+      console.log(result);
+      return res.status(201).send({ message: 'Usuario creado exitosamente' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).send({ message: 'Error al crear el usuario' });
+    });
+};
 
 const update = (req, res) => {
-    res.send({ message: 'Soy el controlador del usuario' });
-}
+  const { id } = req.params;
+  const { name, email } = req.body;
+
+  return userService.update(id, name, email)
+    .then((result) => {
+      console.log(result);
+      return res.status(200).send({ message: 'Usuario actualizado exitosamente' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).send({ message: 'Error al actualizar el usuario' });
+    });
+};
 
 const del = (req, res) => {
-    res.send({ message: 'Soy el controlador del usuario' });
-}
+  const { id } = req.params;
+
+  return userService.del(id)
+    .then((result) => {
+      console.log(result);
+      return res.status(200).send({ message: 'Usuario eliminado exitosamente' });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).send({ message: 'Error al eliminar el usuario' });
+    });
+};
 
 export default {
-    list,
-    find,
-    create,
-    update,
-    del,
+  list,
+  find,
+  create,
+  update,
+  del,
 };
