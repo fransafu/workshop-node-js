@@ -16,9 +16,9 @@ const find = async (req, res) => {
 };
 
 const create = (req, res) => {
-  const { name } = req.body;
+  const { name, email } = req.body;
 
-  return userService.create(name)
+  return userService.create(name, email)
     .then((result) => {
       console.log(result);
       return res.status(201).send({ message: 'Usuario creado exitosamente' });
