@@ -28,7 +28,7 @@ const update = async (id, content) => {
   const comment = await Comment.findOne({ _id: id }, { _id: 0, __v: 0 });
 
   if (!comment) {
-    return Promise.reject(false);
+    return false;
   }
 
   const oldContent = comment.toJSON();
